@@ -79,10 +79,10 @@ function load(){
     var parsd = JSON.parse(mapJson);
     row = Math.ceil(parsd["mapSize"]["height"] / 2);
     col = Math.ceil(parsd["mapSize"]["width"] / 2);
-    //console.log("initial big y");
-    //console.log(row);
-    //console.log("initial big x");
-    //console.log(col);
+    console.log("initial big y");
+    console.log(row);
+    console.log("initial big x");
+    console.log(col);
     maxrow = parsd["mapSize"]["height"];
     maxcolon = parsd["mapSize"]["width"];
 
@@ -105,9 +105,9 @@ function load(){
     canva3.height =  3 * 50;
 
 //display map with the correct three x three tiles
-    displayMap(mapJson, ctx, col, row);
+    displayMap(mapJson, col, row);
 
-    displayPlayer(playJs, ctx1,0,0);
+    displayPlayer(playJs,ctx1,0,0);
 
     displayParties(JSON.stringify(playerJsn));
 
@@ -125,6 +125,15 @@ function load(){
         }else if(key == "ArrowRight"){
             incrx = 1;
         }
+
+        //check if moving further does not go out of the edges, do not allow it
+        if(toStr["location"]["x"] + incrx >= 150 || toStr["location"]["x"] + incrx <= 0){
+            incr = 0;
+        }
+        if(toStr["location"]["y"] + incry >= 150 || toStr["location"]["y"] + incry <= 0){
+            incry = 0;
+        }
+    
         toStr["location"]["x"] += incrx;
         toStr["location"]["y"] += incry;
 
@@ -141,7 +150,7 @@ function load(){
 //utimately it looks like tiles:[[tile,  tile, tile], [tile, tile, tile], [tile, tile, tile]] or
 // tiles:[[{“type”:””, “passable”: true/false}, {“type”:””, “passable”: true/false}],
 // [{“type”:””, “passable”: true/false},{“type”:””, “passable”: true/false}]]
-function displayMap(mapJson, ctx1, col, row) {
+function displayMap(mapJson, col, row) {
 
     var canva = document.getElementById("canvas1");
     var ctx = canva.getContext("2d") ;
@@ -156,6 +165,26 @@ function displayMap(mapJson, ctx1, col, row) {
     var mapWidth = parsed["mapSize"]["width"];
    // map.cols = mapWidth
 
+
+
+    //check if the column and row are at edges or corners, set appropriate columna nd row value
+    if (row <= 2){
+        row = 2;
+    }else if(row >= mapHeight - 1){
+        row = mapHeight - 1;
+    }
+
+
+    if(col <= 2){
+        col = 2;
+    }else if(col >= mapWidth  - 1){
+        col = mapWidth - 1;
+    }
+
+
+    console.log("rows and columns in map drawing");
+    console.log(row);
+    console.log(col);
     var tileArr = parsed["tiles"];
     //loop through array indexes compare to the 3 that are useful - current
     //location of the player + 1 behind and 1 next
@@ -192,7 +221,7 @@ function displayMap(mapJson, ctx1, col, row) {
        console.log("got here") ;
        x = 0;
        y = 0;
-    }
+}
     
 function displayPlayer(playerJson, ctx, offsetx, offsety){
     var parsed = JSON.parse(playerJson);
@@ -399,7 +428,7 @@ function updatePlayer(json){
     console.log(offsetx);
     console.log(offsety);
     displayPlayer(JSON.stringify(toStr), ctx, offsetx, offsety);
-    displayMap(JSON.stringify(newJson),ctx,col,row);
+    displayMap(JSON.stringify(newJson),col,row);
     displayParties(JSON.stringify(playerJsn));
 }
 
