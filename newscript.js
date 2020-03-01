@@ -3,7 +3,7 @@
 var toStr = {"location": {"x" : 75.5, "y": 75.5}};
 var playerJsn = {"playerParty":{"location": {"x" : 75.5,"y": 75.5}, "level" : 1, "inBattle" : false},
  "otherParties":[{"location": {"x" : 89,"y": 120.0}, "level" : 5, "inBattle" : false},
- {"location": {"x" : 560.0,"y": 350.0}, "level" : 190, "inBattle" : true}, 
+ {"location": {"x" : 199.0,"y": 180.0}, "level" : 190, "inBattle" : true}, 
  {"location": {"x" : 11.8,"y": 23.3}, "level" : 16, "inBattle" : false}]};
 var newJson = {
     "mapSize" : {"width" : 7, "height" : 7},
@@ -109,7 +109,7 @@ function load(){
 
     displayPlayer(playJs,ctx1,0,0);
 
-    displayParties(JSON.stringify(playerJsn));
+    displayParties(JSON.stringify(playerJsn),0,0);
 
  document.body.onkeydown = function (e) {
         var key = e.key;
@@ -260,6 +260,8 @@ function updatePlayer(json){
     //passed to displayplayer function to show accurate player location not shift to closest center
     var offsetx = 0;
     var offsety = 0;
+    var otheroffx = 0;
+    var otheroffy = 0;
 
     var radius = 5;
     if (x <= (tileSize / 2)){
@@ -276,6 +278,10 @@ function updatePlayer(json){
 
             row -= 1;
             col -= 1;
+
+            otheroffx = 50;
+            otheroffy = 50;
+
         }else if(y >= canvas.height - tileSize){
             offsetx = x - tileSize / 2;
             offsety = y - tileSize * 2.5;
@@ -288,6 +294,9 @@ function updatePlayer(json){
             row += 1;
             col -= 1;
 
+            otheroffx = 50;
+            otheroffy = -50;
+
         }else{
 
             offsetx = x - tileSize / 2;
@@ -299,6 +308,8 @@ function updatePlayer(json){
             console.log(y);
 
             col -= 1;
+
+            otheroffx = 50;
 
         }
 
@@ -316,6 +327,11 @@ function updatePlayer(json){
 
             row += 1;
             col += 1;
+
+            otheroffx = -50;
+            otheroffy = -50;
+
+
         } else if(y <= tileSize){
 
             offsetx = x - tileSize * 2.5;
@@ -328,6 +344,9 @@ function updatePlayer(json){
 
             row -= 1;
             col += 1;
+
+            otheroffx = -50;
+            otheroffy = 50;
         }else{
 
             offsetx = x - tileSize * 2.5;
@@ -339,6 +358,8 @@ function updatePlayer(json){
             console.log(y);
 
             col += 1;
+
+            otheroffx = -50;
         }
 
     } else if(y <= tileSize/2){
@@ -354,6 +375,10 @@ function updatePlayer(json){
 
             row -= 1;
             col -= 1;
+
+            otheroffx = 50;
+            otheroffy = 50;
+
         }else if(x >= canvas.width - tileSize){
 
             offsetx = x - tileSize * 2.5;
@@ -367,6 +392,9 @@ function updatePlayer(json){
             row -= 1;
             col += 1;
 
+            otheroffx = -50;
+            otheroffy = 50;
+
         }else{
 
             offsetx = x - tileSize * 1.5;
@@ -378,6 +406,10 @@ function updatePlayer(json){
             console.log(y);
 
             row -= 1;
+
+            otheroffy = 50;
+            console.log("offy changed");
+            console.log(otheroffy);
         }
     } else if (y >= canvas.height - tileSize / 2){
         if(x <= tileSize){
@@ -393,6 +425,10 @@ function updatePlayer(json){
 
             row += 1;
             col -= 1;
+
+            otheroffx = 50;
+            otheroffy = -50;
+
         }else if(x >= canvas.width - tileSize){
 
             offsetx = x - tileSize * 2.5;
@@ -406,6 +442,11 @@ function updatePlayer(json){
 
             row += 1;
             col += 1;
+
+            otheroffy = -50;
+            otheroffx = -50;
+
+
         }else{
 
             offsetx = x - tileSize * 1.5;
@@ -417,6 +458,8 @@ function updatePlayer(json){
             console.log(y);
 
             row += 1;
+
+            otheroffy = -50;
         }
     }
     parsed["location"]["x"] = x;
@@ -424,16 +467,16 @@ function updatePlayer(json){
     console.log("here xy");
     console.log (x);
     console.log(y);
-    console.log("here offests");
-    console.log(offsetx);
-    console.log(offsety);
+    console.log("here otheroffests");
+    console.log(otheroffx);
+    console.log(otheroffy);
     displayPlayer(JSON.stringify(toStr), ctx, offsetx, offsety);
     displayMap(JSON.stringify(newJson),col,row);
-    displayParties(JSON.stringify(playerJsn));
+    displayParties(JSON.stringify(playerJsn), otheroffx, otheroffy);
 }
 
 
-function displayParties(json){
+function displayParties(json, offsetx, offsety){
 
     var canva = document.getElementById("canvas3");
     var ctx = canva.getContext("2d");
@@ -455,7 +498,7 @@ function displayParties(json){
         console.log(y);
         
         //check if the parties coordinate is in the current 3x3 smallmap
-        if((col - 2) * tileSize <= x && x <= (col) * tileSize && (row - 2) * tileSize <= y && y <= (row) * tileSize ){
+        if((col - 1) * tileSize <= x && x <= (col + 1) * tileSize && (row - 1) * tileSize <= y && y <= (row + 1) * tileSize ){
             console.log("ready to print parties");
            if (elem["inBattle"]){
             ctx.fillStyle = 'red';
@@ -471,14 +514,14 @@ function displayParties(json){
             }
 
             ctx.beginPath();
-            ctx.arc(x, y, 7, 0, 2 * Math.PI);
+            ctx.arc(x + offsetx, y + offsety, 7, 0, 2 * Math.PI);
             ctx.stroke();
             ctx.fill();
             ctx.beginPath();
             ctx.fillStyle = "black";
             ctx.font = "10px Georgia";
             ctx.lineWidth = 1;
-            ctx.fillText(level.toString(), x - 2 , y + 1);
+            ctx.fillText(level.toString(), x + offsetx - 2 , y + offsety + 1);
             ctx.fill();  
             }
        
