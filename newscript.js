@@ -3,7 +3,7 @@
 var toStr = {"location": {"x" : 75.5, "y": 75.5}};
 var playerJsn = {"playerParty":{"location": {"x" : 75.5,"y": 75.5}, "level" : 1, "inBattle" : false},
  "otherParties":[{"location": {"x" : 89,"y": 120.0}, "level" : 5, "inBattle" : false},
- {"location": {"x" : 20.4,"y": 45.0}, "level" : 190, "inBattle" : true}, 
+ {"location": {"x" : 560.0,"y": 350.0}, "level" : 190, "inBattle" : true}, 
  {"location": {"x" : 11.8,"y": 23.3}, "level" : 16, "inBattle" : false}]};
 var newJson = {
     "mapSize" : {"width" : 7, "height" : 7},
