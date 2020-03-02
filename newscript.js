@@ -249,14 +249,12 @@ function updatePlayer(json){
     var canvas = document.getElementById("canvas2");
     var ctx = canvas.getContext("2d");
     ctx.clearRect(0,0,canvas.width, canvas.height);
-
+    console.log("updating player");
     var parsed = JSON.parse(json);
-    console.log("x coord");
+    
     var x = parsed["location"]["x"];
-    console.log(x);
-    console.log("y coord");
     var y = parsed["location"]["y"];
-    console.log(y);
+ 
     //passed to displayplayer function to show accurate player location not shift to closest center
     var offsetx = 0;
     var offsety = 0;
@@ -464,9 +462,6 @@ function updatePlayer(json){
     }
     parsed["location"]["x"] = x;
     parsed["location"]["y"] = y;
-    console.log("here xy");
-    console.log (x);
-    console.log(y);
     console.log("here otheroffests");
     console.log(otheroffx);
     console.log(otheroffy);
