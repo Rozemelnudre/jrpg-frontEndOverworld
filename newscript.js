@@ -271,7 +271,7 @@ function updatePlayer(json){
 
             toStr["location"]["x"] = canvas.width / 2 + offsetx;//+- offsets?
             toStr["location"]["y"] = canvas.height / 2 + offsety;
-            console.log("y after setting anew1")
+            console.log("y after setting anew1");
             console.log(y);
 
             row -= 1;
@@ -491,9 +491,14 @@ function displayParties(json, offsetx, offsety){
         console.log(x);
         console.log("partyy");
         console.log(y);
+
+        console.log((row -2) * tileSize);
+        console.log((row + 1) * tileSize);
+        console.log((col - 2) * tileSize);
+        console.log((col + 1) * tileSize);
         
         //check if the parties coordinate is in the current 3x3 smallmap
-        if((col - 1) * tileSize <= x && x <= (col + 1) * tileSize && (row - 1) * tileSize <= y && y <= (row + 1) * tileSize ){
+        if((col - 2) * tileSize <= x && x <= (col + 1) * tileSize && (row - 2) * tileSize <= y && y <= (row + 1) * tileSize ){
             console.log("ready to print parties");
            if (elem["inBattle"]){
             ctx.fillStyle = 'red';
